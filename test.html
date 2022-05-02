@@ -1,0 +1,44 @@
+<html>
+  <body>
+    <script src="location.js"></script>
+    <script>
+      function checkLocation(){
+        const location = document.getElementById("location").value.split(',');
+
+        if (location.length == 2) {
+          const result = isInOntario(parseFloat(location[0]),
+                                  parseFloat(location[1]));
+          const message = result ? 'you are in Ontario' : 'you are NOT in Ontario';
+          document.getElementById("message").innerText = message;
+        }
+        else {
+          document.getElementById("message").innerText = "invalid location, set like: 45.39890, -75.69329"
+        }
+      }
+
+      function getLocation(){
+        var options =
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            document.getElementById("location").value = `${position.coords.latitude}, ${position.coords.longitude}`;
+            document.getElementById("precision").innerText = `Browser position is accurate to within ${position.coords.accuracy} meters`;
+            checkLocation();
+          },
+          error => console.error(error),
+          {enableHighAccuracy: true}
+        );
+      }
+    </script>
+
+    <input type="button" value="Get Location from Browser" onclick="getLocation();" />
+    <span id="precision"></span>
+    <div>
+      <label for="location">Location</label>
+      <input id="location" />
+      <span id="message"></span>
+    </div>
+
+    <input type="button" value="Check if location is in Ontario" onclick="checkLocation();" />
+
+  </body>
+</html>
